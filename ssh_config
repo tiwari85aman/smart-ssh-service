@@ -1,9 +1,3 @@
-HOST aman
-	Hostname 35.192.102.79
-	User kriaga3
-	Port 22
-	IdentityFile ~/.ssh/id_rsa
-	LocalForward 1000 35.192.102.79:5000
 HOST XXX1
 	Hostname 35.192.102.79
 	User kriaga3
@@ -15,4 +9,10 @@ HOST krishna
 	User tesst
 	Port 22
 	IdentityFile ~/.ssh/id
-	LocalForward 5044 127.0.0.1:1000
+HOST AmanUpdated
+	LocalForward 1000 35.192.102.79:5000
+	LocalForward 1212 35.192.102.79:1212
+	Hostname 35.192.102.79
+	User kriaga3
+	Port 22
+	IdentityFile ~/.ssh/id_rsa

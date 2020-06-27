@@ -42,7 +42,16 @@ class SshHandler(object):
             for host, config in current_config.items():
                 f.writelines("HOST {}\n".format(host))
                 for key, value in config.items():
-                    f.writelines("\t{key} {value}\n".format(key=key, value=value))
+                    if key.lower() == 'localforward':
+                        for eachForward in value:
+                            f.writelines(
+                                "\tLocalForward {hostPort} {remoteIp}:{remotePort}\n".format(
+                                    hostPort=eachForward["hostPort"],
+                                    remoteIp=eachForward["remoteIp"],
+                                    remotePort=eachForward[
+                                        "remotePort"]))
+                    else:
+                        f.writelines("\t{key} {value}\n".format(key=key, value=value))
         return "Saved new host", True
 
     def edit_config(self, host, data):
@@ -54,7 +63,16 @@ class SshHandler(object):
                 for host, config in current_config.items():
                     f.writelines("HOST {}\n".format(host))
                     for key, value in config.items():
-                        f.writelines("\t{key} {value}\n".format(key=key, value=value))
+                        if key.lower() == 'localforward':
+                            for eachForward in value:
+                                f.writelines(
+                                    "\tLocalForward {hostPort} {remoteIp}:{remotePort}\n".format(
+                                        hostPort=eachForward["hostPort"],
+                                        remoteIp=eachForward["remoteIp"],
+                                        remotePort=eachForward[
+                                            "remotePort"]))
+                        else:
+                            f.writelines("\t{key} {value}\n".format(key=key, value=value))
             return "Host updated", True
         else:
             return "Host doesn't exist", False
@@ -64,6 +82,6 @@ class SshHandler(object):
         forwarding = []
         for host, config in config.items():
             for each in config["localForward"]:
-                each["host"]=host
+                each["host"] = host
             forwarding.extend(config["localForward"])
         return forwarding, True
