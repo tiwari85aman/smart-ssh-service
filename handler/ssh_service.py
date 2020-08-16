@@ -92,12 +92,15 @@ class SshHandler(object):
 
     def get_ping_status(self):
         config = self.read_config()
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(2)
+        
         result = {"online": [], "offline": []}
         for host, config in config.items():
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(2)
+            print(config)
             socket_result = sock.connect_ex((config["Hostname"], int(config["Port"])))
             host_data = {"Host": host, "Hostname": config["Hostname"]}
+            print(socket_result)
             if socket_result:
                 result["offline"].append(host_data)
             else:
