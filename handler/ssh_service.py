@@ -1,3 +1,6 @@
+import socket
+
+
 class SshHandler(object):
     def __init__(self):
         self.filename = "/home/aman/.ssh/config"
@@ -32,13 +35,14 @@ class SshHandler(object):
                 else:
                     properties[value[0]] = " ".join(value[1:])
         else:
-            final[host] = properties
+            if properties:
+                final[host] = properties
         return final
 
     def add_config(self, data):
         current_config = self.read_config()
         current_config[data.pop("Host")] = data
-        with open("./ssh_config", mode="w+") as f:
+        with open(self.filename, mode="w+") as f:
             for host, config in current_config.items():
                 f.writelines("HOST {}\n".format(host))
                 for key, value in config.items():
@@ -59,7 +63,7 @@ class SshHandler(object):
         if host in current_config.keys():
             current_config.pop(host)
             current_config[data.pop("Host")] = data
-            with open("./ssh_config", mode="w+") as f:
+            with open(self.filename, mode="w+") as f:
                 for host, config in current_config.items():
                     f.writelines("HOST {}\n".format(host))
                     for key, value in config.items():
@@ -85,3 +89,18 @@ class SshHandler(object):
                 each["host"] = host
             forwarding.extend(config["localForward"])
         return forwarding, True
+
+    def get_ping_status(self):
+        config = self.read_config()
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(2)
+        result = {"online": [], "offline": []}
+        for host, config in config.items():
+            socket_result = sock.connect_ex((config["Hostname"], int(config["Port"])))
+            host_data = {"Host": host, "Hostname": config["Hostname"]}
+            if socket_result:
+                result["offline"].append(host_data)
+            else:
+                result["online"].append(host_data)
+            sock.close()
+        return result, True

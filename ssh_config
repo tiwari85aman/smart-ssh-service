@@ -1,18 +1,5 @@
-HOST XXX1
-	Hostname 35.192.102.79
-	User kriaga3
-	Port 22
-	IdentityFile ~/.ssh/id
-	LocalForward 5044 127.0.0.1:1000
-HOST krishna
-	Hostname 35.192.102.79
-	User tesst
-	Port 22
-	IdentityFile ~/.ssh/id
-HOST AmanUpdated
-	LocalForward 1000 35.192.102.79:5000
-	LocalForward 1212 35.192.102.79:1212
-	Hostname 35.192.102.79
-	User kriaga3
-	Port 22
-	IdentityFile ~/.ssh/id_rsa
+HOST Aman
+	Hostname 8.8.8.8
+	Port 80
+	IdentityFile /home/aman/id_rsa.pub
+	User centos

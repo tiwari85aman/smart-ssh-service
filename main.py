@@ -44,6 +44,13 @@ class HostEdit(Resource):
         output, status = handler.get_local_forward()
         return CustomResponse(output)
 
+@ns_conf.route("/ping")
+class HostPing(Resource):
+
+    def get(self):
+        time.sleep(3)
+        output, status = handler.get_ping_status()
+        return CustomResponse(output)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
